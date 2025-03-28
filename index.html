@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #222;
+            color: white;
+        }
+        input {
+            padding: 10px;
+            width: 300px;
+            margin: 20px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .movie-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .movie {
+            background: #333;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            width: 250px;
+        }
+        img {
+            width: 100%;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search App</h1>
+    <input type="text" id="search" placeholder="Enter movie name...">
+    <button onclick="searchMovie()">Search</button>
+    <div class="movie-container" id="movies"></div>
+    
+    <script>
+        async function searchMovie() {
+            const query = document.getElementById("search").value;
+            if (!query) return;
+            const apiKey = "?i=tt3896198&apikey=9afcca01"; // Replace with your OMDb API key
+            const url = `https://www.omdbapi.com/?t=${query}&apikey=${apiKey}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            const moviesDiv = document.getElementById("movies");
+            moviesDiv.innerHTML = "";
+            
+            if (data.Search) {
+                data.Search.forEach(movie => {
+                    const movieElement = document.createElement("div");
+                    movieElement.classList.add("movie");
+                    movieElement.innerHTML = `
+                        <img src="${movie.Poster}" alt="${movie.Title}">
+                        <h3>${movie.Title}</h3>
+                        <p>${movie.Year}</p>
+                    `;
+                    moviesDiv.appendChild(movieElement);
+                });
+            } else {
+                moviesDiv.innerHTML = "<p>No results found</p>";
+            }
+        }
+    </script>
+</body>
+</html>
