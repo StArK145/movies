@@ -3,77 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Search</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #222;
-            color: white;
-        }
-        input {
-            padding: 10px;
-            width: 300px;
-            margin: 20px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .movie-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .movie {
-            background: #333;
-            margin: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            width: 250px;
-        }
-        img {
-            width: 100%;
-            border-radius: 5px;
-        }
-    </style>
+    <title>StreamFinder</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <h1>Movie Search App</h1>
-    <input type="text" id="search" placeholder="Enter movie name...">
-    <button onclick="searchMovie()">Search</button>
-    <div class="movie-container" id="movies"></div>
-    
-    <script>
-        async function searchMovie() {
-            const query = document.getElementById("search").value;
-            if (!query) return;
-            const apiKey = "?i=tt3896198&apikey=9afcca01"; // Replace with your OMDb API key
-            const url = `https://www.omdbapi.com/?t=${query}&apikey=${apiKey}`;
+    <div class="app-container">
+        <header>
+            <div class="logo">StreamFinder</div>
+            <div class="search-container">
+                <i class="material-icons search-icon">search</i>
+                <input type="text" id="search" placeholder="Search movies, shows..." oninput="fetchMovies()">
+            </div>
+        </header>
 
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            const moviesDiv = document.getElementById("movies");
-            moviesDiv.innerHTML = "";
-            
-            if (data.Search) {
-                data.Search.forEach(movie => {
-                    const movieElement = document.createElement("div");
-                    movieElement.classList.add("movie");
-                    movieElement.innerHTML = `
-                        <img src="${movie.Poster}" alt="${movie.Title}">
-                        <h3>${movie.Title}</h3>
-                        <p>${movie.Year}</p>
-                    `;
-                    moviesDiv.appendChild(movieElement);
-                });
-            } else {
-                moviesDiv.innerHTML = "<p>No results found</p>";
-            }
-        }
-    </script>
+        <main>
+            <section id="movies" class="movies-grid"></section>
+        </main>
+
+        <div id="overlay" class="overlay"></div>
+        <div id="movie-popup" class="popup">
+            <div class="popup-content">
+                <button class="close-btn" onclick="closePopup()">
+                    <i class="material-icons">close</i>
+                </button>
+                <div id="movie-details" class="movie-details-content"></div>
+            </div>
+        </div>
+    </div>
+   
+    <script src="script.js"></script>
 </body>
 </html>
